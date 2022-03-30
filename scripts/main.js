@@ -4,11 +4,66 @@ const endpoints = {
     products: `${baseUrl}/products/`,
 }
 
+const form = document.querySelector('.popup');
+
 ///GET request
 
 const state = {
     products: null
 }
+
+function editProduct(id){
+    const obj = {
+        title: document.getElementById('editTitle').value,
+        description: document.getElementById('editDescription').value,
+        price: document.getElementById('editPrice').value,
+        stock_price: document.getElementById('editStockPrice').value,
+        category_id: document.getElementById('editCategory_id').value,
+        image: null
+    }
+    fetch(`https://geektech-project.herokuapp.com/products/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(obj)
+    });
+    form.innerHTML = ``;
+}
+
+function closeForm(){
+    form.innerHTML =``
+}
+
+function openForm(id){
+    fetch(`https://geektech-project.herokuapp.com/products/${id}`, {
+        method: 'GET'
+    }).then((res)=>{
+        return res.json();
+    }).then((data) => {
+        state.products = data;
+        form.innerHTML = `
+        <div class="popup__container">
+            <div class="popup__body">
+                <p>Редактируйте выбраный товар</p>
+                <p>Edit title</p>
+                <input type="text" value="${data.title}"  placeholder="name" id="editTitle">
+                <p>Edit description</p>
+                <textarea cols="30" rows="10" placeholder="description" id="editDescription">${data.description}</textarea>
+                <p>Edit price</p>
+                <input type="number" value="${data.price}" placeholder="price" id="editPrice">
+                <p>Edit stock Price</p>
+                <input type="number" value="${data.stock_price}" id="editStockPrice">
+                <p>Edit category</p>
+                <input type="number" value="${data.category_id}" placeholder="category ID" id="editCategory_id">
+                <button onclick="editProduct(${data.id})">Edit!</button>
+                <button onclick="closeForm()">Cancel editing</button>
+            </div>
+        </div>`
+    })
+}
+
+
 
 function deleteProduct(id) {
     fetch(`https://geektech-project.herokuapp.com/products/${id}`, {
@@ -32,6 +87,7 @@ function getAllProduct(){
                     <p class="description">${data[i].description}</p>
                     <p class="price">${data[i].price}</p>
                     <button onclick="deleteProduct(${data[i].id})">Delete</button>
+                    <button onclick="openForm(${data[i].id})">Edit</button>
                 </div>`;
             }
     })

@@ -1,6 +1,7 @@
 body {
     padding: 0;
     margin: 0;
+    font-family: sans-serif;
 }
 
 .products {
@@ -34,9 +35,19 @@ body {
 .form__content {
     display: flex;
     justify-content: center;
+
+}
+
+.form__block {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
     padding-top: 30px;
+    padding-bottom: 30px;
 }
 
-.form {
-
+.popup {
+    background-color: #cecbcb;
 }
+
+
